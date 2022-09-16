@@ -14,8 +14,8 @@ return new class extends Migration {
     {
         Schema::create('blood_banks', function (Blueprint $table) {
             $table->id();
-            $table->string('type', 4);
-            $table->integer('amount');
+            $table->string('type');
+            $table->integer('amount')->default(0);
         });
     }
 

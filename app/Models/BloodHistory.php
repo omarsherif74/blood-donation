@@ -10,5 +10,4 @@ class BloodHistory extends Model
     use HasFactory;
 
     public $timestamps = false;
-
 }
