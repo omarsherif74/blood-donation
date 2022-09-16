@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::post("admin/login", [AdminController::class, 'login'])->name('admin.login');
-Route::post("admin/signup", [AdminController::class, 'signup'])->name('admin.signup');
+Route::post("admin/signup", [AdminController::class, 'signup']);
+Route::post("admin/login", [AdminController::class, 'login']);
 Route::get("admin/list_users", [AdminController::class, 'list_users']);
 Route::get("admin/list_banks", [AdminController::class, 'list_banks']);
+
+
+Route::get('user/', [UserController::class, 'index']);
+Route::post('user/signup', [UserController::class, 'signup']);
+Route::post('user/login', [UserController::class, 'login']);
+Route::post('user/donate/{user_id}', [UserController::class, 'donate']);
+Route::post('user/request/{user_id}', [UserController::class, 'request']);
+Route::get('user/show_history/{user_id}', [UserController::class, 'show_history']);

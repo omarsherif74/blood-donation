@@ -11,5 +11,8 @@ class BloodBank extends Model
 
     public $timestamps = false;
 
-
+    public $fillable = [
+        'type',
+        'amount'
+    ];
 }

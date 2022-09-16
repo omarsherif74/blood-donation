@@ -10,26 +10,30 @@ use Illuminate\Http\Response;
 
 class AdminController extends Controller
 {
-    public function login(Request $request){
-        $admin = Admin::where('email', '=', $request->email)->get();
-        if ($request->password == $admin->password){
+    public function login(Request $request)
+    {
+        $admin = Admin::where('email', '=', $request->email)->first();
+
+        if ($admin && $request->password == $admin->password) {
             return response()->json(['message' => 'login successful', 'code' => 200]);
-        }
-        else{
+        } else {
             return response()->json(['message' => 'wrong login details', 'code' => 501]);
         }
     }
 
-    public function signup(Request $request){
-        $user = new Admin();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->save();
-        return response()->json(['message' => 'registration successful', 'code' => 200]);
+    public function signup(Request $request)
+    {
+        $admin = new Admin();
+        $admin->admin_id = $request->admin_id;
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        $admin->password = $request->password;
+        $admin->save();
+        return response()->json(['message' => 'Admin registration successful', 'code' => 200]);
     }
 
-    public function list_users(){
+    public function list_users()
+    {
         $users = User::all();
         return response()->json($users);
     }
