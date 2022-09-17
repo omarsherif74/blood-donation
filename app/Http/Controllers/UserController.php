@@ -112,15 +112,17 @@ class UserController extends Controller
 
     public function show_history($user_id)
     {
+
         $history = BloodHistory::where('user_id', $user_id)->first();
         if (!$history) {
             return response()->json(['message' => 'User ID not found.', 'code' => 404]);
         }
 //            return response()->json($history);
+
         $user = User::where('user_id', $user_id)->first();
 
         $bloodType = $user->blood_type;
-        $temp = substr($user->blood_type, 0, 1);
+        $temp = substr($history->blood_type, 0, 1);
         if ($temp == 'd') {
             $transactionType = 'Donation';
         } else {
