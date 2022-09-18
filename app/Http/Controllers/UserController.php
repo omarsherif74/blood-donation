@@ -27,7 +27,7 @@ class UserController extends Controller
         $user->age = $request->age;
         $user->gender = $request->gender;
         $user->save();
-        return response()->json(['message' => 'User registration successful', 'code' => 200]);
+        return response()->json('User registration successful');
     }
 
     public function login(Request $request)
@@ -35,26 +35,28 @@ class UserController extends Controller
         $user = User::where('email', '=', $request->email)->first();
 
         if ($user && $request->password == $user->password) {
-            return response()->json(['message' => 'login successful', 'code' => 200]);
-        } else {
-            return response()->json(['message' => 'wrong login details', 'code' => 501]);
+
+            return response()->json(['userID' => $user->user_id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'bloodType' => $user->blood_type,
+                'age' => $user->age,
+                'gender' => $user->gender,]);
+
         }
+        return response()->json('Login failed');
 
     }
 
     public function request(Request $request, $user_id)
     {
-
         $user = User::where('user_id', $user_id)->first();
-        if (!$user) {
-            return response()->json(['message' => 'User ID not found.', 'code' => 404]);
-        }
-
 
         $bank = BloodBank::where('type', $request->blood_type)->first();
-        if (!$bank || $bank->amount <= 0) {
-            return response()->json(['message' => 'No available blood banks for user #' . $user_id, 'code' => 404]);
+        if (!$user || !$bank || $bank->amount <= 0) {
+            return response()->json('Request failed');
         }
+
         $bank->amount = $bank->amount - 1;
         $bank->save();
 
@@ -64,28 +66,15 @@ class UserController extends Controller
         $receiver->date = $request->date;
         $receiver->save();
 
+        return response()->json('Requested blood successfully');
 
-        return response()->json(['message' => 'User #' . $user_id . ' requested blood successfully', 'code' => 200]);
-
-//        $receiver = new BloodHistory();
-//        $receiver->user_id = $user_id;
-//        $receiver->blood_type = 'r' . $request->blood_type;
-//
-//        $receiver->date = $request->date;
-//        $receiver->save();
-//
-//        $bank = BloodBank::where('type', $request->blood_type)->first();
-//        $bank->amount = $bank->amount - 1;
-//        $bank->save();
-//
-//        return response()->json(['message' => 'User #' . $user_id . ' requested blood successfully', 'code' => 200]);
     }
 
     public function donate(Request $request, $user_id)
     {
         $user = User::where('user_id', $user_id)->first();
         if (!$user) {
-            return response()->json(['message' => 'User ID not found.', 'code' => 404]);
+            return response()->json('Donation failed');
         }
 
         $donation = new BloodHistory();
@@ -102,7 +91,7 @@ class UserController extends Controller
             $bank->save();
         }
 
-        return response()->json(['message' => 'User #' . $user_id . ' donated blood successfully', 'code' => 200]);
+        return response()->json('Donated blood successfully');
 
     }
 
@@ -111,14 +100,12 @@ class UserController extends Controller
 
         $history = BloodHistory::where('user_id', $user_id)->get();
         if (!$history) {
-            return response()->json(['message' => 'User ID not found.', 'code' => 404]);
+            return response()->json('Cannot show history');
         }
 
-        $array = array();
         $big = array();
 
         foreach ($history as $record) {
-//            $name = BloodHistory::where('user_id', $user_id)->pluck('user_id');
 
             $user = User::where('user_id', $user_id)->first();
 
@@ -144,6 +131,5 @@ class UserController extends Controller
         return $big;
 
     }
-
 
 }
