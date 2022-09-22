@@ -134,13 +134,14 @@ class UserController extends Controller
 
 
             $array = array(
-                'bloodType ' => $bloodType,
-                'transactionType ' => $transactionType,
-                'date ' => $date,
-                'client ' => $client);
+                'bloodType' => $bloodType,
+                'transactionType' => $transactionType,
+                'date' => $date,
+                'client' => $client);
 
             array_push($big, $array);
         }
+        
         return $big;
 
     }
