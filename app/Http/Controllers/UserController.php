@@ -19,15 +19,14 @@ class UserController extends Controller
     public function signup(Request $request)
     {
         $user = new User();
-        $user->user_id = $request->user_id;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->blood_type = $request->blood_type;
+        $user->blood_type = $request->bloodType;
         $user->age = $request->age;
         $user->gender = $request->gender;
         $user->save();
-        return response()->json('User registration successful');
+        return response()->json(['message'=> "You have signed up successfully"]);
     }
 
     public function login(Request $request)
