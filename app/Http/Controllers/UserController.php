@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index()
     {
 
-        return 'blood bank types created';
+        return 'User index';
     }
 
     public function signup(Request $request)
@@ -53,17 +53,18 @@ class UserController extends Controller
         $user = User::where('user_id', $user_id)->first();
 
         $bank = BloodBank::where('type', $request->blood_type)->first();
-        if (!$user || !$bank || $bank->amount <= 0) {
+        if (!$user || !$bank || ($bank->amount < $request->amount)) {
             return response()->json('Request failed');
         }
 
-        $bank->amount = $bank->amount - 1;
+        $bank->amount = $bank->amount - $request->amount;
         $bank->save();
 
         $receiver = new BloodHistory();
-        $receiver->user_id = $user_id;
+        $receiver->name = $request->name;
         $receiver->blood_type = 'r' . $request->blood_type;
         $receiver->date = $request->date;
+        $receiver->amount = $request->amount;
         $receiver->save();
 
         return response()->json('Requested blood successfully');

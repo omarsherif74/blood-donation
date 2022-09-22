@@ -14,9 +14,11 @@ return new class extends Migration {
     {
         Schema::create('blood_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+//            $table->integer('user_id');
+            $table->string('name');
             $table->string('blood_type');
             $table->date('date');
+            $table->integer('amount');
         });
     }
 
